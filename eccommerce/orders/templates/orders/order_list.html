@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Siparişler</h2>
+    
+    <a href="{% url 'orders:create_order' %}" class="btn btn-primary mb-3">Yeni Sipariş Oluştur</a>
+    <a href="?ordering=created_at">Eskiden yeniye</a> |
+    <a href="?ordering=-created_at">Yeniden eskiye</a>
+
+    <form method="get">
+        <select name="status">
+            <option value="" {% if not request.GET.status %}selected{% endif %}>Tümü</option>
+            <option value="pending" {% if request.GET.status == "pending" %}selected{% endif %}>Beklemede</option>
+            <option value="processing" {% if request.GET.status == "processing" %}selected{% endif %}>İşleniyor</option>
+            <option value="completed" {% if request.GET.status == "completed" %}selected{% endif %}>Tamamlandı</option>
+        </select>        
+        <button type="submit">Filtrele</button>
+    </form>
+    
+    <a href="{% url 'orders:list' %}">Siparişleri Listele</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Sipariş ID</th>
+                <th>Ürün Adı</th>
+                <th>Miktar</th>
+                <th>Durum</th>
+                <th>Oluşturulma Tarihi</th>
+                <th>Son Güncelleme</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>#{{ order.id }}</td>
+                <td>{{ order.product_name }}</td>
+                <td>{{ order.quantity }}</td>
+                <td>
+                    {% if order.status == 'pending' %}
+                        <span class="badge bg-warning">Bekliyor</span>
+                    {% elif order.status == 'processing' %}
+                        <span class="badge bg-info">İşleniyor</span>
+                    {% elif order.status == 'completed' %}
+                        <span class="badge bg-success">Tamamlandı</span>
+                    {% endif %}
+                </td>
+                <td>{{ order.created_at|date:"d/m/Y H:i:s" }}</td>
+                <td>{{ order.updated_at|date:"d/m/Y H:i:s" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center">Henüz sipariş bulunmuyor.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+<!-- orders/templates/orders/order_status.html -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sipariş Durumu</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .order-status {
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-top: 20px;
+      }
+      .pending {
+        background-color: #fff3cd;
+      }
+      .processing {
+        background-color: #cce5ff;
+      }
+      .completed {
+        background-color: #d4edda;
+      }
+    </style>
+    <script>
+      function checkStatus() {
+        location.reload();
+      }
+      setInterval(checkStatus, 5000);
+    </script>
+  </head>
+  <body>
+    <h1>Sipariş Durumu</h1>
+    <div class="order-status {{ object.status }}">
+      <h2>{{ object.product_name }}</h2>
+      <p>Miktar: {{ object.quantity }}</p>
+      <p>Durum: {{ object.get_status_display }}</p>
+      <p>Oluşturulma Tarihi: {{ object.created_at }}</p>
+    </div>
+    <a href="{% url 'orders:create_order' %}">Yeni Sipariş Oluştur</a>
+    {% if messages %} {% for message in messages %}
+    <div class="alert alert-info">{{ message }}</div>
+    {% endfor %} {% endif %}
+  </body>
+</html>
