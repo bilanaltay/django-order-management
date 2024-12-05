@@ -41,7 +41,8 @@ python manage.py migrate
 ### 4. Celery ve RabbitMQ Başlatma
 RabbitMQ'yu başlatın:
 ```bash
-sudo systemctl start rabbitmq-server
+sudo systemctl start rabbitmq-server # macOS/Linux
+rabbitmq-server start # Windows
 ```
 
 Celery'i başlatın:
